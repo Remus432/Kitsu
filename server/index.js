@@ -15,6 +15,14 @@ app.get('/', function(req, res) {
   res.render('index.html');
 });
 
+app.get("/animes.html", function(req, res) {
+    res.render("animes.html");
+})
+
+app.get("/anime.html", function(req, res) {
+    res.render("anime.html");
+})
+
 app.listen(port, function() {
   console.log('Running on port 1337');
 });
