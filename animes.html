@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="css/animes.css">
+    <link href="https://fonts.googleapis.com/css?family=Raleway:300,400,500,700" rel="stylesheet">
+    <link rel="stylesheet" href="http://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+    <title>Animes</title>
+</head>
+<body>
+
+    <div class="grid">
+
+    </div>
+
+    <script
+  src="http://code.jquery.com/jquery-3.3.1.js"
+  integrity="sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auK4Pfzbm7uH60="
+  crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/latest/TweenMax.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/latest/plugins/ScrollToPlugin.min.js"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script>
+        // IIFE
+        (function getAnime() {
+            // Get anime name from LS
+            const animeName = localStorage.getItem("animeName");
+            // Get Request
+            axios.get(`https://kitsu.io/api/edge/anime?filter[text]=${animeName}`)
+                .then(data => {
+                    console.log(data);
+                    // Init output var
+                    let output = ``;
+                    // Loop through data
+                    for(let anime of data.data.data) {
+                        output += `
+                            <div id="${anime.id}" class="anime">
+                                <button>View</button>
+                                <div class="overlay"></div>
+                                <img src="${anime.attributes.posterImage.medium}" >
+                            </div>
+                        `;
+                    }
+                    // Output data to UI
+                    document.querySelector(".grid").innerHTML = output;
+                    // Get all divs
+                    const buttons = document.querySelectorAll("button");
+                    // Add event listener for each
+                    buttons.forEach(div => div.addEventListener("click", showAnime));
+                })
+                .catch(err => {
+                    console.log(err);
+                })
+        })();
+
+
+        function showAnime(e) {
+            // Store in LS
+            localStorage.setItem("animeID", e.target.parentElement.id);
+            // Change location
+            location.href = "anime.html";
+        }
+
+
+        $(function(){
+	
+            var $window = $(window);		//Window object
+            
+            var scrollTime = 1.2;			//Scroll time
+            var scrollDistance = 170;		//Distance. Use smaller value for shorter scroll and greater value for longer scroll
+                
+            $window.on("mousewheel DOMMouseScroll", function(event){
+                
+                event.preventDefault();	
+                                                
+                var delta = event.originalEvent.wheelDelta/120 || -event.originalEvent.detail/3;
+                var scrollTop = $window.scrollTop();
+                var finalScroll = scrollTop - parseInt(delta*scrollDistance);
+                    
+                TweenMax.to($window, scrollTime, {
+                    scrollTo : { y: finalScroll, autoKill:true },
+                        ease: Power1.easeOut,	//For more easing functions see https://api.greensock.com/js/com/greensock/easing/package-detail.html
+                        autoKill: true,
+                        overwrite: 5							
+                    });
+                            
+            });
+        
+        });
+    </script>
+</body>
+</html>

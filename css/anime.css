@@ -1,0 +1,104 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    background: #0a3d62;
+    font-family: "Lato", sans-serif;
+}
+
+
+.grid {
+    display: grid;
+    grid-template-columns: 1fr 3fr;
+    justify-content: center;
+    width: 100%;
+    margin: auto;
+    grid-gap: 30px;
+}
+
+.anime {
+    width: 100%;
+    text-align: center;
+}
+
+
+.show {
+    width: 400px;
+    position: relative;
+}
+
+.show h2 {
+    text-align: center;
+    color: #fff;
+}
+
+.show img {
+    width: 100%;
+}
+
+.anime .iframe-container {
+    position: relative;
+    width: 80%;
+    height: 0;
+    padding-bottom: 46%;
+    margin: auto;
+    box-shadow: 0px 10px 25px #000;
+    animation-name: animation;
+    animation-duration: 10s;
+    animation-fill-mode: forwards;
+}
+
+.anime iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border:10px solid #eb2f06;
+}
+
+.anime h2 {
+    color: #fff;
+}
+
+.anime .description {
+    width: 80%;
+    line-height: 1.6;
+    padding: 35px;
+    font-size: 25px;
+    text-align: center;
+    margin: auto;
+    background: #fff;
+    color: #353b48;
+}
+
+.changed {
+    transition: all 0.5s;
+}
+
+.changed:hover {
+    box-shadow: 0px 10px 25px #000;
+}
+
+
+/* Review Section */
+.well {
+    background: #fff;
+    border: 4px solid #eb2f06;
+    width: 100%;
+    grid-column: 1/4;
+    padding: 20px;
+}
+
+
+
+.well p {
+    padding: 10px;
+    line-height: 2;
+    color: #353b48;
+}

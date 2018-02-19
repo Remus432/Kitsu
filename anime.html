@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="css/anime.css">
+    <title>Document</title>
+</head>
+<body>
+
+    <div class="grid">
+
+    </div>
+
+      <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+      <script>
+          
+
+          // IIFE
+          (function getAnime() {
+              // Get anime name from LS
+              const animeID = localStorage.getItem("animeID");
+              // Get Request
+              axios.get(`https://kitsu.io/api/edge/anime?filter[id]=${animeID}`)
+                  .then(data => {
+                      console.log(data);
+                      // Init output var
+                      let output = ``;
+                    
+                  
+                          output += `
+                          <div class="show">
+                                  <img src="${data.data.data[0].attributes.posterImage.medium}" />
+                                  <h2>${data.data.data[0].attributes.canonicalTitle}</h2> 
+                                </div>
+                              <div id="${data.data.data[0].id}" class="anime">
+                                  <div class="iframe-container">
+                                  <iframe  src="https://www.youtube.com/embed/${data.data.data[0].attributes.youtubeVideoId}?rel=0&amp;controls=0&amp;showinfo=0;autoplay=1" frameborder="0" allowfullscreen></iframe>
+                                  </div>
+                                  <div class="description">
+                                    <p>${data.data.data[0].attributes.synopsis}</p>
+                                  </div>
+                              </div>
+                              <div class="well"></div>
+                          `;
+                      
+                      // Output data to UI
+                      document.querySelector(".grid").innerHTML = output;
+
+                      // Select item
+                      document.querySelector(".description").addEventListener("mouseover", addTransition);
+
+                      loadReviews(data.data.data[0].relationships.reviews.links.related);
+
+                  })
+                  .catch(err => {
+                      console.log(err);
+                  })
+          })();
+
+
+          // Load reviews
+          function loadReviews(url) {
+              axios.get(url)
+                .then(data => {
+                    console.log(data);
+                    // Init output var
+                    let output = ``;
+
+                    for(let review of data.data.data) {
+                        output += `
+                        ${review.attributes.contentFormatted}<br>
+                        <hr>
+                        `;
+                    }
+
+                    document.querySelector(".well").innerHTML += output;
+                })
+                .catch(err => {
+                    console.log(err);
+                })
+          }
+
+          function addTransition(e) {
+                  if(e.target.className === "description") {
+                    e.target.classList.add("changed");
+                  }
+                  
+                  document.querySelector(".iframe-container").classList.toggle("animation");
+          }
+  
+      </script>
+</body>
+</html>
